@@ -5,24 +5,9 @@ B2-bkup is a python tool to automate the 3-2-1 backup solution using Backblaze.
 It provides a server-client architecture, and is customizable.
 
 <p align="center">
-  <img src="./screenshots/example.png" alt="Size Limit example"
+  <img src="https://tangoworldwide.net/Themes/Altier_2/images/logo2.png" alt="TangoWorldWide"
        width="654" height="450">
 </p>
-
-
-<p align="center">
-  <img src="./screenshots/why.png" alt="Bundle Analyzer example"
-       width="650" height="335">
-</p>
-
-<p align="center">
-  <a href="https://evilmartians.com/?utm_source=size-limit">
-    <img src="https://evilmartians.com/badges/sponsored-by-evil-martians.svg"
-         alt="Sponsored by Evil Martians" width="236" height="54">
-  </a>
-</p>
-
-[Size Limit: Make the Web lighter]: https://evilmartians.com/chronicles/size-limit-make-the-web-lighter
 
 
 
