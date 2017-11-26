@@ -1,12 +1,11 @@
 # B2-bkup
 
-B2-bkup is a python tool to automate the 3-2-1 backup solution using Backblaze.
+B2-bkup is a python tool to automate the 3-3-1 backup solution using Backblaze.
 
 It provides a server-client architecture, and is customizable.
 
 <p align="center">
-  <img src="https://tangoworldwide.net/Themes/Altier_2/images/logo2.png" alt="TangoWorldWide"
-       width="654" height="450">
+  <img src="https://tangoworldwide.net/Themes/Altier_2/images/logo2.png" alt="TangoWorldWide">
 </p>
 
 
@@ -58,7 +57,7 @@ B2-kup blah blah
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is to be determined...
 
 ## Acknowledgments
 
