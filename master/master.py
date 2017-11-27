@@ -15,9 +15,12 @@ from server import ServerHandler
 import json
 
 settings = {}
+# Debug flag, set to 1 to turn on
 debug = 0
 
 def readConfigs(configFile = "master-config.ini"):
+	"""Read master-config.ini and parse/assign data from file to 
+	dictionary containing all the variables and values."""
 	cfg = configparser.ConfigParser()
 	cfg.read(configFile)
 	global settings
@@ -32,11 +35,14 @@ def readConfigs(configFile = "master-config.ini"):
 	debug = int(cfg['GENERAL']['DEBUG'])
 
 def FTSU():
+	"""Folder creation check for first time setup."""
 	if not os.path.exists(settings["storage"]):
 		os.makedirs(settings["storage"])
 
 
 def main():
+	"""Main function call. Set --ftsu argument for first time setup execution. 
+	Loading in JSON whitelist configuration. Opens a socket to wait for a Minion connection."""
 	cmdLen = len(sys.argv)
 	cmdArg = str(sys.argv)
 	if(cmdLen > 1 and sys.argv[1].lower() == "--ftsu"):
@@ -57,6 +63,7 @@ def main():
 	s.close()
 
 if __name__ == "__main__":
+	"""Run main only if directly called."""
 	main()
 
 

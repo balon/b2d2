@@ -7,13 +7,19 @@ It provides a server-client architecture, and is customizable.
 
 ## How It Works
 
-You can find more examples in...
+Need to run First Time Setup Execution on server with the following command:
+```sh
+$ python master.py --ftsu
+```
 
-To be really specific, B2-bkup runs
+And to run First Time Setup Execution on minion with the following command:
+```sh
+$ python minion.py --ftsu
+```
 
 ## Usage
 
-First, install `...`:
+Add to crontab `...`:
 
 ```sh
 $ python3 ...
