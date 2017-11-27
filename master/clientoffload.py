@@ -1,6 +1,6 @@
 '''
-	File name: client.py
-	Purpose: Client socket handling for b2d2
+	File name: clientoffload.py
+	Purpose: ClientHandler offload from server
 	Authors: TJ Balon, Matt Topor
 	Date Modified: 11/26/2017
 	Python Version: 3.5
@@ -10,12 +10,13 @@
 # 'LICENSE.txt', which is part of this source code package.
 import socket
 
-class SpawnClient:
-	"""Handles client socket establishment."""
-	def __init__(self, ip, port):
-		"""Return a client socket connection with ip and port."""
-		self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.client.connect((ip, port))
+class ClientHandler:
+	"""Handles the client's read/write/close functions."""
+	def __init__(self, client):
+		self.client = client
+
+	def __del__(self):
+    	print("Deleting client.")
 
 	def read(self, length=1024):
 		"""Return recieved data, only expecting Status Msgs."""

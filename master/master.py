@@ -60,7 +60,6 @@ def main():
 			whitelist.append(x)
 
 	s = ServerHandler(int(settings["serverPort"]), whitelist, settings)
-	s.close()
 
 if __name__ == "__main__":
 	"""Run main only if directly called."""

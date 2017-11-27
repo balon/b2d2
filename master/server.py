@@ -10,8 +10,10 @@
 # 'LICENSE.txt', which is part of this source code package.
 import socket
 import sys
+import os
 import _thread as thread
 from common import *
+from clientoffload import *
 
 # Debug flag, set to 1 to turn on
 debug = 1
@@ -26,9 +28,6 @@ class ServerHandler:
 		self.host = '0.0.0.0'
 		self.port = port
 
-		print(self.host)
-		print(self.port)
-
 		if(debug == 1):
 			print("Server started")
 			print("Waiting for new clients..")
@@ -40,14 +39,13 @@ class ServerHandler:
 			sys.exit()
 
 		self.server.listen(10)
-
 		self.repeater()
-		self.close()
 
 	def repeater(self):
 		"""Starts new thread for every client accepted to server."""
 		while True:
 			client, addr = self.server.accept()
+
 			tmp = tuple(addr)
 			if(tmp[0] in self.wl):
 				thread.start_new_thread(self.backupClient,(client, addr))
@@ -56,7 +54,10 @@ class ServerHandler:
 
 	def backupClient(self, client, addr):
 		"""Initialization for every client that connects to server."""
-		clientIdent = self.read(1024)
+		client = ClientHandler(client, addr)
+		clientIdent = client.read(1024)
+		print(clientIdent)
+
 		status = "Waiting"
 		identPath = str(self.settings["storage"] + "/" + clientIdent.decode("utf-8") )
 		
@@ -64,12 +65,12 @@ class ServerHandler:
 			os.makedirs(identPath)
 
 		client.self.write("[Master] Identity Recieved")
-		while status not "[Minion] Complete":
-			dirName = self.read(1024)
-			buildPath = identPath + str(dirName)
+		#while status not "[Minion] Complete":
+			#dirName = self.read(1024)
+			#buildPath = identPath + str(dirName)
 
-			if not os.path.exists(buildPath)
-				os.makedirs(buildPath)
+			#if not os.path.exists(buildPath)
+				#os.makedirs(buildPath)
 
 			# still need to recieve big file..
 			# then we need to store it
@@ -78,7 +79,11 @@ class ServerHandler:
 			# compare 
 			# send status OK to move on
 
-		
+		del client
+
+	def cread(self, client, len=1024):
+		return client.recv(len)
+
 	def read(self, length=1024):
 		"""Returns data recieved."""
 		return self.server.recv(length)
