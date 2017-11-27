@@ -47,7 +47,20 @@ def readConfigs(configFile = "minion-config.ini"):
 			print(str(k) + ": " + str(v))
 		print("Relaunch with new file to change configuration preferences.")
 
+def FTSU():
+	# Make initial folder
+	# Eventually.. generate certificates for SSL
+	pass
+
 def main():
+	cmdLen = len(sys.argv)
+	cmdArg = str(sys.argv)
+	if(cmdLen > 1 and sys.argv[1].lower() == "--ftsu"):
+		print("Running as FTSU (First Time Set-Up)")
+		FTSU()
+		print("FTSU ran successfully, re-run without --ftsu parameter.")
+		sys.exit()
+
 	readConfigs()
 
 	with open(settings["backups"]) as backups:
