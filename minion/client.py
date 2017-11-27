@@ -19,6 +19,7 @@ class ClientHandler:
 		return self.client.recv(1024)
 
 	def sendall(self, buff):
+		buff = bytes(buff, 'utf-8')
 		self.client.sendall(buff)
 
 	def close(self):

@@ -75,25 +75,6 @@ def FTSU():
 
 	# Eventually.. generate certificates for SSL
 
-def tarFile(paths, buildPath):
-	tar = tarfile.open(buildPath, "w:gz")
-	for path in paths:
-		tar.add(path)
-	logger.info("Tar Created: " + buildPath)
-	tar.close()
-
-def hashFile(path):
-	sha1 = hashlib.sha1()
-
-	with open(path, 'rb') as f:
-		while True:
-			data = f.read(65535)
-			if not data:
-				break
-			sha1.update(data)
-
-	print(sha1.hexdigest())
-
 def main():
 	readConfigs()
 
@@ -113,7 +94,8 @@ def main():
 		sys.exit()
 
 	c.sendall(bytes(settings["identity"], 'utf-8'))
-
+	status = c.read(1024)
+	
 	for item in decoded["items"]:
 		if not os.path.exists(settings["storage"] + "/" + item["name"]):
 			os.makedirs(settings["storage"] + "/" + item["name"])
@@ -126,6 +108,11 @@ def main():
 		
 		tarFile(item["paths"], buildPath)
 		fileDigest = hashFile(buildPath)
+
+		c.sendall(item["name"])
+
+	c.sendall(bytes("[Minion] Complete", 'utf-8'))
+	c.close()
 
 if __name__ == "__main__":
 	main()

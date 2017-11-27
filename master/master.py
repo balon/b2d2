@@ -28,13 +28,12 @@ def readConfigs(configFile = "master-config.ini"):
 	settings["b2Key"] = cfg['BACKBLAZE']['B2KEY']
 	settings["b2Auth"] = cfg['BACKBLAZE']['B2AUTH']
 	settings["whitelist"] = cfg['MASTER']['WHITELIST']
+	settings["storage"] = cfg['GENERAL']['LOCALSTORE']
 	debug = int(cfg['GENERAL']['DEBUG'])
 
 def FTSU():
-	if not os.path.exists("backups"):
-		os.makedirs("backups")
-	# Eventually.. generate certificates for SSL
-	pass
+	if not os.path.exists(settings["storage"]):
+		os.makedirs(settings["storage"])
 
 
 def main():
@@ -54,7 +53,7 @@ def main():
 		for x in decoded["whitelist"]:
 			whitelist.append(x)
 
-	s = ServerHandler(int(settings["serverPort"]), whitelist)
+	s = ServerHandler(int(settings["serverPort"]), whitelist, settings)
 	s.close()
 
 if __name__ == "__main__":
