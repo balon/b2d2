@@ -9,3 +9,6 @@
 # This code is property of TangoNetworksLLC & Affiliates... 
 # All code is subject to the terms and conditioned defined in
 # 'LICENSE.txt', which is part of this source code package.
+
+def prepareFiles(decoded):
+	pass

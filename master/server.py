@@ -15,7 +15,8 @@ import threading as thread
 debug = 1
 
 class ServerHandler:
-	def __init__(self, port):
+	def __init__(self, port, wl):
+		self.wl = wl
 		self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.host = '0.0.0.0'
 		self.port = port
@@ -29,22 +30,32 @@ class ServerHandler:
 
 		try:
 			self.server.bind((self.host, self.port))
-		except socket.error as msg:
-			print("Error attempting to bind port. Err: " + str(msg[0]) + ' Message ' + str(msg[1]))
+		except:
+			print("Error: Could not bind port! Already in use?")
 			sys.exit()
 
 		self.server.listen(10)
 
+		self.repeater()
+		self.close()
+
+	def repeater(self):
 		while True:
 			client, addr = self.server.accept()
-			print(client)
-			print(addr)
-			
+			tmp = tuple(addr)
+			if(tmp[0] in self.wl):
+				print("Success!")
+			else:
+				print("A non authorized client attempted to connect!")
+
 	def backup(self):
 		pass
 
 	def send(self, buff):
 		self.server.send(buff)
+
+	def write(self):
+
 
 	def close(self):
 		self.server.close()
