@@ -11,6 +11,8 @@
 # 'LICENSE.txt', which is part of this source code package.
 import configparser
 import sys
+from client import ClientHandler
+import json
 
 # Global Variable Definition
 settings = {}
@@ -25,6 +27,7 @@ def readConfigs(configFile = "minion-config.ini"):
 	debug = int(cfg['GENERAL']['DEBUG'])
 	settings["runMode"] = (cfg['MINION']['RUNMODE']).lower()
 	settings["identity"] = cfg['MINION']['IDENTIFIER']
+	settings["backups"] = cfg['MINION']['BACKUPFILE']
 
 	if(settings["runMode"] == "remote"):
 		settings["masterAddr"] = cfg['REMOTE']['SERVERADDR']
@@ -44,4 +47,18 @@ def readConfigs(configFile = "minion-config.ini"):
 			print(str(k) + ": " + str(v))
 		print("Relaunch with new file to change configuration preferences.")
 
-readConfigs()
+def main():
+	readConfigs()
+
+	with open(settings["backups"]) as backups:
+		decoded = json.load(backups)
+		for x in decoded["items"]:
+			print(x["name"])
+
+
+
+	#c = ClientHandler(settings["masterAddr"], int(settings["masterPort"]))
+
+
+if __name__ == "__main__":
+	main()
