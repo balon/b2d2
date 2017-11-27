@@ -10,15 +10,13 @@
 # All code is subject to the terms and conditioned defined in
 # 'LICENSE.txt', which is part of this source code package.
 import configparser
-import tarfile
 import sys
 import json
 import os
 import logging
-import hashlib
 from datetime import datetime
 from common import *
-from client import ClientHandler
+from client import SpawnClient
 
 # Global Variable Definition
 settings = {}
@@ -95,13 +93,14 @@ def main():
 		decoded = json.load(backups)
 
 	try:
-		c = ClientHandler(settings["masterAddr"], int(settings["masterPort"]))
+		c = SpawnClient(settings["masterAddr"], int(settings["masterPort"]))
 	except:
 		logger.info("Could not connect to server.. is server running?")
 		sys.exit()
 
 	c.sendall(bytes(settings["identity"], 'utf-8'))
-	status = c.read(1024)
+	#status = c.read(1024)
+	#print(status)
 	
 	for item in decoded["items"]:
 		if not os.path.exists(settings["storage"] + "/" + item["name"]):
@@ -115,8 +114,9 @@ def main():
 		
 		tarFile(item["paths"], buildPath)
 		fileDigest = hashFile(buildPath)
+		print(fileDigest)
 
-		c.sendall(item["name"])
+		c.sendall(bytes(item["name"], 'utf-8'))
 
 		# must send file
 		# then send hash 
