@@ -22,6 +22,7 @@ from client import ClientHandler
 
 # Global Variable Definition
 settings = {}
+# Debug flag, set to 1 to turn on
 debug = 0
 
 # Gloal Logger
@@ -40,6 +41,8 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 def readConfigs(configFile = "minion-config.ini"):
+	"""Read minion-config.ini and parse/assign data from file to 
+	dictionary containing all the variables and values. Debug calls added to function."""
 	cfg = configparser.ConfigParser()
 	cfg.read(configFile)
 	global settings
@@ -70,12 +73,15 @@ def readConfigs(configFile = "minion-config.ini"):
 		logger.info("Relaunch with new file to change configuration preferences.")
 
 def FTSU():
+	"""Folder creation check for first time setup."""
 	if not os.path.exists(settings["storage"]):
 		os.makedirs(settings["storage"])
 
 	# Eventually.. generate certificates for SSL
 
 def main():
+	"""Main function call. First time setup execution. Loading in JSON backup configuration.
+	Opens a socket to connect to the Master. Compresses the data, and sends it all to master."""
 	readConfigs()
 
 	if( len(sys.argv) > 1 and sys.argv[1].lower() == "--ftsu"):
@@ -115,4 +121,5 @@ def main():
 	c.close()
 
 if __name__ == "__main__":
+	"""Run main only if directly called."""
 	main()

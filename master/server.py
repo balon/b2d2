@@ -13,10 +13,13 @@ import sys
 import _thread as thread
 from common import *
 
+# Debug flag, set to 1 to turn on
 debug = 1
 
 class ServerHandler:
+	"""Handles server socket connections. Verifies clients, and reads backup data."""
 	def __init__(self, port, wl, settings):
+		"""Returns host, port variables. Attempts to bind host and port."""
 		self.settings = settings
 		self.wl = wl
 		self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -42,6 +45,7 @@ class ServerHandler:
 		self.close()
 
 	def repeater(self):
+		"""Starts new thread for every client accepted to server."""
 		while True:
 			client, addr = self.server.accept()
 			tmp = tuple(addr)
@@ -51,6 +55,7 @@ class ServerHandler:
 				print("A non authorized client attempted to connect!")
 
 	def backupClient(self, client, addr):
+		"""Initialization for every client that connects to server."""
 		clientIdent = self.read(1024)
 		status = "Waiting"
 		identPath = str(self.settings["storage"] + "/" + clientIdent.decode("utf-8") )
@@ -74,12 +79,15 @@ class ServerHandler:
 			# send status OK to move on
 
 		
-	def read(self, length=1024)
+	def read(self, length=1024):
+		"""Returns data recieved."""
 		return self.server.recv(length)
 
 	def write(self, buff):
+		"""Writes data to end of buffer."""
 		buff = bytes(buff, 'utf-8')
 		self.server.send(buff)
 
 	def close(self):
+		"""Closes server socket connection."""
 		self.server.close()

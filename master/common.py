@@ -10,13 +10,18 @@
 # All code is subject to the terms and conditioned defined in
 # 'LICENSE.txt', which is part of this source code package.
 
+"""Shared common functions among both minion and master. Contains
+hashing and compression function of backup data."""
+
 def tarFile(paths, buildPath):
+	"""Creation of tar.gz compression."""
 	tar = tarfile.open(buildPath, "w:gz")
 	for path in paths:
 		tar.add(path)
 	tar.close()
 
 def hashFile(path):
+	"""Returns hash value."""
 	sha1 = hashlib.sha1()
 
 	with open(path, 'rb') as f:
