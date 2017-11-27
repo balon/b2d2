@@ -31,7 +31,8 @@ def readConfigs(configFile = "master-config.ini"):
 	debug = int(cfg['GENERAL']['DEBUG'])
 
 def FTSU():
-	# Make initial folder
+	if not os.path.exists("backups"):
+		os.makedirs("backups")
 	# Eventually.. generate certificates for SSL
 	pass
 
@@ -47,15 +48,14 @@ def main():
 
 	readConfigs()
 
-	with open(settings["whitelists"]) as wl:
+	with open(settings["whitelist"]) as wl:
 		decoded = json.load(wl)
+		whitelist = []
 		for x in decoded["whitelist"]:
-			print(x)
+			whitelist.append(x)
 
-
-
-	#s = ServerHandler(int(settings["serverPort"]))
-
+	s = ServerHandler(int(settings["serverPort"]), whitelist)
+	s.close()
 
 if __name__ == "__main__":
 	main()

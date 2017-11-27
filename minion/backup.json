@@ -1,17 +1,24 @@
 {
 	"items": [
 		{
-			"name": "Server",
-			"path": "/path/to/file",
+			"name": "C1-UBAR-DEV",
+			"paths": [
+				"/root/ubs/web",
+				"/root/ubs/tech"
+			],
 			"exclude": [
-				"one",
-				"two",
-				"three"
+				"one"
 			]
 		},
 		{
-			"name": "Server2",
-			"path": "/path/to/file"
+			"name": "C1-UBAR-LIVE",
+			"paths": [
+				"/root/ubs"
+			],
+			"exclude": [
+				"one"
+			]
 		}
+
 	]
 }

@@ -13,8 +13,6 @@ import socket
 class ClientHandler:
 	def __init__(self, ip, port):
 		self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		print(ip)
-		print(port)
 		self.client.connect((ip, port))
 
 	def read(self):
