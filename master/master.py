@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 '''
 	File name: master.py
-	Purpose: Server binary for b2bkup
+	Purpose: Server binary for b2d2
 	Authors: TJ Balon, Matt Topor
 	Date Modified: 11/26/2017
 	Python Version: 3.5

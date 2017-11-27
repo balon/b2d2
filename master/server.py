@@ -1,6 +1,6 @@
 '''
 	File name: server.py
-	Purpose: Server Class for b2bkup
+	Purpose: Server Class for b2d2
 	Authors: TJ Balon, Matt Topor
 	Date Modified: 11/26/2017
 	Python Version: 3.5
