@@ -68,7 +68,7 @@ class ServerHandler:
 				os.makedirs(baseDir)
 
 			client.writestr(("[Master] Backup dir name recieved: " + str(bkupDir)))
-			bucketSub = str(bkupDir.decode("utf-8"))
+			bucketSub = str( clientIdent.decode("utf-8") + "/" + bkupDir.decode("utf-8"))
 
 			bkupName = client.read(1024)
 			buildPath = str(baseDir + "/" + bkupName.decode("utf-8"))
