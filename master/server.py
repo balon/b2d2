@@ -14,6 +14,7 @@ import os
 import _thread as thread
 from common import *
 from clientoffload import *
+from subprocess import call
 
 class ServerHandler:
 	"""Handles server socket connections. Verifies clients, and reads backup data."""
@@ -32,6 +33,9 @@ class ServerHandler:
 
 		self.server.listen(10)
 		self.repeater()
+
+	def __del__(self):
+		self.server.close()
 
 	def repeater(self):
 		"""Starts new thread for every client accepted to server."""
@@ -56,7 +60,7 @@ class ServerHandler:
 
 		status = "Not finished"
 		client.writestr("[Master] Identity Recieved")
-		while(status != "[Droids] All transfers complete!"):
+		while(status != "[Droid] All transfers complete!"):
 			bkupDir = client.read(1024)
 			baseDir = str(identPath + "/" + bkupDir.decode("utf-8"))
 
@@ -64,10 +68,12 @@ class ServerHandler:
 				os.makedirs(baseDir)
 
 			client.writestr(("[Master] Backup dir name recieved: " + str(bkupDir)))
+			bucketSub = str(bkupDir.decode("utf-8"))
 
 			bkupName = client.read(1024)
 			buildPath = str(baseDir + "/" + bkupName.decode("utf-8"))
-			
+			bucketFN = str(bucketSub + "/" + bkupName.decode("utf-8"))
+
 			client.writestr("[Master] Backup name recieved")
 
 			bkupSize = client.read(1024)
@@ -99,9 +105,26 @@ class ServerHandler:
 			else:
 				client.writestr("[Master] Hash mismatch!")
 
+			print("Pushing to BackBlaze...")
+			print(buildPath)
+			print(bucketFN)
+			call(["b2", "authorize-account", self.settings["b2Key"], self.settings["b2Auth"]])
+			call(["b2", "upload-file", "--threads", self.settings["b2Threads"], self.settings["b2Bucket"], buildPath, bucketFN ])
+
+			files = os.listdir(baseDir)
+			numFiles = len(files)
+
+			if(numFiles > 1):
+				delFile = min(os.listdir(baseDir), key=lambda p: os.path.getctime(os.path.join(baseDir, p)))
+				os.remove(baseDir + "/" + delFile)
+			else:
+				print("There are less files than the keep files setting, skipping cleaning up.. ")
+
 			status = client.read(1024)
 			status = status.decode("utf-8")
 			print(status)
+
+			client.writestr("[Master] STATUS OK")
 
 		del client
 
