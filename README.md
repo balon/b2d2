@@ -20,12 +20,12 @@ What's better than two copies of data? __Three__.
 ## Install
 Install is simple, each instance supports a "First Time Setup" to get you started! All information will be generated here, don't forget to edit the **IDENTIFIER** section of your config before FTSU is executed.
 
-####Master:
+#### Master:
 ```bash
 $ pip3 install --upgrade b2
 $ python3 master.py --ftsu
 ```
-####Droid:
+#### Droid:
 ```bash
 $ python3 droid.py --ftsu
 ```
@@ -38,7 +38,7 @@ Master will wait for new clients to connect, receive it's backup files, and uplo
 $ python3 master.py
 ```
 
-####Droid:
+#### Droid:
 Using a unix based system? Add a new system user which will be in the groups of each user's content you wish to backup. Then run the droid on crontab per that user. Example to follow:
 ```bash
 $ useradd -s /usr/sbin/nologin -r -M -d /srv/backups backups
@@ -118,7 +118,7 @@ Want to backup from a new client? Add their public IP to your whitelist's json f
 ```
 
 ## Credits
-* [BackBlaze](https://www.backblaze.com/): API Keys, b2 upload binaries
+* [BackBlaze](https://www.backblaze.com/): API Keys, b2 command line tool
 
 ## License
 Read license information in LICENSE.TXT
