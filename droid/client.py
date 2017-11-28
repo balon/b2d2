@@ -21,7 +21,11 @@ class SpawnClient:
 		"""Return recieved data, only expecting Status Msgs."""
 		return self.client.recv(length)
 
-	def sendall(self, buff):
+	def sendstr(self, buff):
+		buff = bytes(buff, 'utf-8')
+		self.client.sendall(buff)
+
+	def sendbytes(self, buff):
 		"""Sends all data from client."""
 		self.client.sendall(buff)
 

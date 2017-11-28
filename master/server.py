@@ -15,25 +15,17 @@ import _thread as thread
 from common import *
 from clientoffload import *
 
-# Debug flag, set to 1 to turn on
-debug = 1
-
 class ServerHandler:
 	"""Handles server socket connections. Verifies clients, and reads backup data."""
 	def __init__(self, port, wl, settings):
 		"""Returns host, port variables. Attempts to bind host and port."""
-		self.settings = settings
-		self.wl = wl
 		self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.host = '0.0.0.0'
-		self.port = port
-
-		if(debug == 1):
-			print("Server started")
-			print("Waiting for new clients..")
+		self.settings = settings
+		self.wl = wl
 
 		try:
-			self.server.bind((self.host, self.port))
+			self.server.bind((self.host, port))
 		except:
 			print("Error: Could not bind port! Already in use?")
 			sys.exit()
@@ -56,42 +48,62 @@ class ServerHandler:
 		"""Initialization for every client that connects to server."""
 		client = ClientHandler(client, addr)
 		clientIdent = client.read(1024)
-		print(clientIdent)
 
-		status = "Waiting"
 		identPath = str(self.settings["storage"] + "/" + clientIdent.decode("utf-8") )
 		
 		if not os.path.exists(identPath):
-			os.makedirs(identPath)
+			os.makedirs(identPath) 
 
-		client.self.write("[Master] Identity Recieved")
-		#while status not "[Minion] Complete":
-			#dirName = self.read(1024)
-			#buildPath = identPath + str(dirName)
+		complete = "Not finished"
+		client.writestr("[Master] Identity Recieved")
+		while(complete != "Success [OK]"):
+			bkupDir = client.read(1024)
+			baseDir = str(identPath + "/" + bkupDir.decode("utf-8"))
 
-			#if not os.path.exists(buildPath)
-				#os.makedirs(buildPath)
+			if not os.path.exists(baseDir):
+				os.makedirs(baseDir)
 
-			# still need to recieve big file..
-			# then we need to store it
-			# hash it
-			# take the hash of the client
-			# compare 
-			# send status OK to move on
+			client.writestr(("[Master] Backup dir name recieved: " + str(bkupDir)))
+
+			bkupName = client.read(1024)
+			buildPath = str(baseDir + "/" + bkupName.decode("utf-8"))
+			
+			client.writestr("[Master] Backup name recieved")
+
+			bkupSize = str(client.read(1024))
+			print("Expecting..." + str(bkupSize))
+
+			client.writestr("[Master] Backup size recieved")
+
+			fptr = open(str(buildPath), 'wb')
+			buff = client.read(1024)
+			total = len(buff)
+
+			while True:
+				fptr.write(buff)
+
+				print(total)
+				print(bkupSize)
+				
+				if (str(total) != str(bkupSize)):
+					print("frank fuck u for python and snake")
+					buff = client.read(1024)
+					total = total + len(buff)
+				else:
+					break
+			print("YOU FUCKING GOT HERE MATE")
+			fptr.close()
+
+			client.writestr("[Master] File recieved")
+			clientHash = client.read(1024)
+			fileDigest = hashFile(buildPath)
+
+			if(clientHash == fileDigest):
+				client.writestr("[Master] Hash matches!")
+			else:
+				client.writestr("[Master] Hash mismatch!")
 
 		del client
-
-	def cread(self, client, len=1024):
-		return client.recv(len)
-
-	def read(self, length=1024):
-		"""Returns data recieved."""
-		return self.server.recv(length)
-
-	def write(self, buff):
-		"""Writes data to end of buffer."""
-		buff = bytes(buff, 'utf-8')
-		self.server.send(buff)
 
 	def close(self):
 		"""Closes server socket connection."""

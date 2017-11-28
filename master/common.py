@@ -9,7 +9,8 @@
 # This code is property of TangoNetworksLLC & Affiliates... 
 # All code is subject to the terms and conditioned defined in
 # 'LICENSE.txt', which is part of this source code package.
-
+import tarfile
+import hashlib
 """Common functions library among both droid and master."""
 
 def tarFile(paths, buildPath):
