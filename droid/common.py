@@ -13,6 +13,8 @@ import tarfile
 import hashlib
 """Common functions library among both droid and master."""
 
+# -------------------------------------------------------------
+# 	 tarFile -- input: path, compress a filepath
 def tarFile(paths, buildPath):
 	"""Creation of tar.gz compression."""
 	tar = tarfile.open(buildPath, "w:gz")
@@ -20,6 +22,8 @@ def tarFile(paths, buildPath):
 		tar.add(path)
 	tar.close()
 
+# -------------------------------------------------------------
+# 	 hashFile -- input: path, hash a file in chunks, return sha1
 def hashFile(path):
 	"""Returns hash value."""
 	sha1 = hashlib.sha1()
