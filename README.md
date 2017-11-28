@@ -129,3 +129,10 @@ Read license information in LICENSE.TXT
 * **TJ Balon** - [balon](https://git.tangoworldwide.net/balon)
 * **Matt Topor** - - [polak](https://git.tangoworldwide.net/polak)
 
+## Future Work
+* Implement SSL Transfer of backup from master -> droid
+* Implement offload to other providors (Amazon, Google, etc)
+* Implement intial security key exchange of public RSA keys
+* RSA signing of messages from master -> droid protocol
+* Better clean-up handling. Delete per days, not amount of files
+* ???

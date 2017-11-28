@@ -1,0 +1,20 @@
+TangoNetworks LLC CONFIDENTIAL
+Proprietary Property Notice
+__________________
+
+2014-2017 TangoNetworks LLC
+All Rights Reserved.
+ 
+@authors: ref https://git.tangoworldwide.net/balon/b2d2/src/master/README.md
+@date: 2017-11-28
+ 
+NOTICE: All information, code, examples, and content is of the property
+of TangoNetworksLLC, and its subsidiary companies. The intellectual
+and technical concepts, ideas, and innovations in this content are
+herein proprietary to TangoNetworksLLC, and its suppliers may be
+covered by U.S. and Foreign Patents, patents in progress, intellectual
+property rights, and are protected by trade secret or copyright law.
+Dissemination of this information or reproduction of this material
+is strictly prohibited unless you are the compiling author, a member
+or manager of TangoNetworksLLC, or granted explicit permission from
+TangoNetworksLLC.
