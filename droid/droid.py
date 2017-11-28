@@ -146,16 +146,19 @@ def main():
 		c.sendstr(fileDigest)
 		srvRes = c.read(1024)
 		print(srvRes)
-		
-		count += 1
-		print(count)
 
+		os.remove(buildPath)
 		if(item == decoded["items"][-1]):
 			break
 		else:
 			c.sendstr("[Droid] I still have data!")
+			srvRes = c.read(1024)
+			print(srvRes)
+
 
 	c.sendstr("[Droid] All transfers complete!")
+	srvRes = c.read(1024)
+	print(srvRes)
 	c.close()
 
 if __name__ == "__main__":
