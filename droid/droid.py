@@ -102,6 +102,8 @@ def main():
 	srvRes = c.read(1024)
 	print(srvRes)
 
+	count = 0
+
 	for item in decoded["items"]:
 		if not os.path.exists(settings["storage"] + "/" + item["name"]):
 			os.makedirs(settings["storage"] + "/" + item["name"])
@@ -126,7 +128,7 @@ def main():
 
 		bkupSize = str(os.path.getsize(buildPath))
 		c.sendstr(bkupSize)
-		print(bkupSize)
+
 		srvRes = c.read(1024)
 		print(srvRes)
 
@@ -143,15 +145,17 @@ def main():
 
 		c.sendstr(fileDigest)
 		srvRes = c.read(1024)
+		print(srvRes)
+		
+		count += 1
+		print(count)
 
-		c.sendstr()
+		if(item == decoded["items"][-1]):
+			break
+		else:
+			c.sendstr("[Droid] I still have data!")
 
-
-		# must send file
-		# then send hash 
-		# recieve OK? Delete file, move on.
-
-	c.sendall(bytes("[Minion] Complete", 'utf-8'))
+	c.sendstr("[Droid] All transfers complete!")
 	c.close()
 
 if __name__ == "__main__":

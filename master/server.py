@@ -54,9 +54,9 @@ class ServerHandler:
 		if not os.path.exists(identPath):
 			os.makedirs(identPath) 
 
-		complete = "Not finished"
+		status = "Not finished"
 		client.writestr("[Master] Identity Recieved")
-		while(complete != "Success [OK]"):
+		while(status != "[Droids] All transfers complete!"):
 			bkupDir = client.read(1024)
 			baseDir = str(identPath + "/" + bkupDir.decode("utf-8"))
 
@@ -70,8 +70,8 @@ class ServerHandler:
 			
 			client.writestr("[Master] Backup name recieved")
 
-			bkupSize = str(client.read(1024))
-			print("Expecting..." + str(bkupSize))
+			bkupSize = client.read(1024)
+			bkupSize = bkupSize.decode("utf-8")
 
 			client.writestr("[Master] Backup size recieved")
 
@@ -81,27 +81,27 @@ class ServerHandler:
 
 			while True:
 				fptr.write(buff)
-
-				print(total)
-				print(bkupSize)
 				
 				if (str(total) != str(bkupSize)):
-					print("frank fuck u for python and snake")
 					buff = client.read(1024)
 					total = total + len(buff)
 				else:
 					break
-			print("YOU FUCKING GOT HERE MATE")
 			fptr.close()
 
 			client.writestr("[Master] File recieved")
 			clientHash = client.read(1024)
 			fileDigest = hashFile(buildPath)
+			clientHash = clientHash.decode("utf-8")
 
 			if(clientHash == fileDigest):
 				client.writestr("[Master] Hash matches!")
 			else:
 				client.writestr("[Master] Hash mismatch!")
+
+			status = client.read(1024)
+			status = status.decode("utf-8")
+			print(status)
 
 		del client
 
