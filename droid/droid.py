@@ -98,25 +98,54 @@ def main():
 		logger.info("Could not connect to server.. is server running?")
 		sys.exit()
 
-	c.sendall(bytes(settings["identity"], 'utf-8'))
-	#status = c.read(1024)
-	#print(status)
-	
+	c.sendstr(settings["identity"])
+	srvRes = c.read(1024)
+	print(srvRes)
+
 	for item in decoded["items"]:
 		if not os.path.exists(settings["storage"] + "/" + item["name"]):
 			os.makedirs(settings["storage"] + "/" + item["name"])
 
 		cT = datetime.now()
-		tStamp = str(cT.year) + "-" + str(cT.month) + "-" + str(cT.day) + "-" \
-		+ str(cT.hour) + str(cT.minute)  + str(cT.second)
+		bkupName = str(cT.year) + "-" + str(cT.month) + "-" + str(cT.day) + "-" \
+		+ str(cT.hour) + str(cT.minute)  + str(cT.second) + ".tar.gz"
 		buildPath = str(settings["storage"] + "/" + item["name"] \
-		+ "/" + tStamp + ".tar.gz")
+		+ "/" + bkupName)
 		
 		tarFile(item["paths"], buildPath)
 		fileDigest = hashFile(buildPath)
 		print(fileDigest)
 
-		c.sendall(bytes(item["name"], 'utf-8'))
+		c.sendstr(item["name"])
+		srvRes = c.read(1024)
+		print(srvRes)
+
+		c.sendstr(bkupName)
+		srvRes = c.read(1024)
+		print(srvRes)
+
+		bkupSize = str(os.path.getsize(buildPath))
+		c.sendstr(bkupSize)
+		print(bkupSize)
+		srvRes = c.read(1024)
+		print(srvRes)
+
+		fptr= open(buildPath, 'rb')
+		buff = fptr.read(1024)
+
+		while(buff):
+			c.sendbytes(buff)
+			buff = fptr.read(1024)
+		fptr.close()
+
+		srvRes = c.read(1024)
+		print(srvRes)
+
+		c.sendstr(fileDigest)
+		srvRes = c.read(1024)
+
+		c.sendstr()
+
 
 		# must send file
 		# then send hash 

@@ -12,17 +12,22 @@ import socket
 
 class ClientHandler:
 	"""Handles the client's read/write/close functions."""
-	def __init__(self, client):
+	def __init__(self, client, addr):
 		self.client = client
+		self.addr = addr
 
 	def __del__(self):
-    	print("Deleting client.")
+		print("Deleting client: " + str(self.addr))
 
 	def read(self, length=1024):
 		"""Return recieved data, only expecting Status Msgs."""
 		return self.client.recv(length)
 
-	def sendall(self, buff):
+	def writestr(self, buff):
+		buff = bytes(buff, 'utf-8')
+		self.client.sendall(buff)
+
+	def writebytes(self, buff):
 		"""Sends all data from client."""
 		self.client.sendall(buff)
 
